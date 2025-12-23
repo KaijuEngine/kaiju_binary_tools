@@ -142,9 +142,13 @@ jobs:
             cmake `
             ninja `
             git `
-            python `
             pkgconfiglite `
             7zip
+      - name: Install Build Dependencies (python)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+          architecture: "x64"
       - name: Install Build Dependencies (vcpkg)
         shell: pwsh
         run: |
