@@ -138,14 +138,17 @@ jobs:
           git clone https://github.com/microsoft/vcpkg "$env:RUNNER_TEMP\vcpkg"
           & "$env:RUNNER_TEMP\vcpkg\bootstrap-vcpkg.bat"
           "VCPKG_ROOT=$env:RUNNER_TEMP\vcpkg" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-      - name: Set Up Developer Command Prompt
-        uses: ilammy/msvc-dev-cmd@v1
       - name: Build msdf-atlas-gen
         shell: pwsh
         run: |
           git clone --recurse-submodules https://github.com/Chlumsky/msdf-atlas-gen.git "$env:RUNNER_TEMP\msdf-atlas-gen"
           cd "$env:RUNNER_TEMP\msdf-atlas-gen"
-          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake -S . -B build -G Ninja `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" `
+            -DVCPKG_TARGET_TRIPLET=x64-windows `
+            -DCMAKE_C_COMPILER=cl `
+            -DCMAKE_CXX_COMPILER=cl
           cmake --build build
 
       #            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" `
