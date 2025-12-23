@@ -123,56 +123,56 @@ jobs:
           name: msdf-atlas-gen-darwin-arm64
           path: ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-darwin-arm64
 
-  build-msdf-atlas-gen-windows-amd64:
-    name: Build msdf-atlas-gen (windows/amd64)
-    runs-on: windows-2022
-    steps:
-      - name: Install Build Dependencies (packages)
-        shell: pwsh
-        run: |
-          choco install -y --no-progress `
-            cmake `
-            git `
-            pkgconfiglite `
-            7zip
-      - name: Install Build Dependencies (MSVC Dev Cmd)
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: x64
-      - name: Install Build Dependencies (Ninja)
-        uses: seanmiddleditch/gha-setup-ninja@v5
-      - name: Install Build Dependencies (python)
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.14"
-          architecture: "x64"
-      - name: Install Build Dependencies (vcpkg)
-        shell: pwsh
-        run: |
-          git clone https://github.com/microsoft/vcpkg "$env:RUNNER_TEMP\vcpkg"
-          & "$env:RUNNER_TEMP\vcpkg\bootstrap-vcpkg.bat"
-          "VCPKG_ROOT=$env:RUNNER_TEMP\vcpkg" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
-      - name: Build msdf-atlas-gen
-        shell: pwsh
-        run: |
-          git clone --recurse-submodules https://github.com/Chlumsky/msdf-atlas-gen.git "$env:RUNNER_TEMP\msdf-atlas-gen"
-          cd "$env:RUNNER_TEMP\msdf-atlas-gen"
-          cmake -S . -B build -G Ninja `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" `
-            -DVCPKG_TARGET_TRIPLET=x64-windows-static `
-            -DCMAKE_C_COMPILER=cl `
-            -DCMAKE_CXX_COMPILER=cl
-          cmake --build build
-      - name: Rename binary
-        run: |
-          mv -v ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen.exe ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-windows-amd64.exe
-      - name: Upload binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: msdf-atlas-gen-windows-amd64.exe
-          path: |
-            ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-windows-amd64.exe
+#  build-msdf-atlas-gen-windows-amd64:
+#    name: Build msdf-atlas-gen (windows/amd64)
+#    runs-on: windows-2022
+#    steps:
+#      - name: Install Build Dependencies (packages)
+#        shell: pwsh
+#        run: |
+#          choco install -y --no-progress `
+#            cmake `
+#            git `
+#            pkgconfiglite `
+#            7zip
+#      - name: Install Build Dependencies (MSVC Dev Cmd)
+#        uses: ilammy/msvc-dev-cmd@v1
+#        with:
+#          arch: x64
+#      - name: Install Build Dependencies (Ninja)
+#        uses: seanmiddleditch/gha-setup-ninja@v5
+#      - name: Install Build Dependencies (python)
+#        uses: actions/setup-python@v5
+#        with:
+#          python-version: "3.14"
+#          architecture: "x64"
+#      - name: Install Build Dependencies (vcpkg)
+#        shell: pwsh
+#        run: |
+#          git clone https://github.com/microsoft/vcpkg "$env:RUNNER_TEMP\vcpkg"
+#          & "$env:RUNNER_TEMP\vcpkg\bootstrap-vcpkg.bat"
+#          "VCPKG_ROOT=$env:RUNNER_TEMP\vcpkg" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+#      - name: Build msdf-atlas-gen
+#        shell: pwsh
+#        run: |
+#          git clone --recurse-submodules https://github.com/Chlumsky/msdf-atlas-gen.git "$env:RUNNER_TEMP\msdf-atlas-gen"
+#          cd "$env:RUNNER_TEMP\msdf-atlas-gen"
+#          cmake -S . -B build -G Ninja `
+#            -DCMAKE_BUILD_TYPE=Release `
+#            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" `
+#            -DVCPKG_TARGET_TRIPLET=x64-windows-static `
+#            -DCMAKE_C_COMPILER=cl `
+#            -DCMAKE_CXX_COMPILER=cl
+#          cmake --build build
+#      - name: Rename binary
+#        run: |
+#          mv -v ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen.exe ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-windows-amd64.exe
+#      - name: Upload binary
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: msdf-atlas-gen-windows-amd64.exe
+#          path: |
+#            ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-windows-amd64.exe
 
   test-msdf-atlas-gen-linux-arm64:
     name: Test msdf-atlas-gen (linux/arm64)
@@ -222,19 +222,19 @@ jobs:
           chmod a+x ./msdf-atlas-gen-darwin-arm64
           ./msdf-atlas-gen-darwin-arm64 -help
 
-  test-msdf-atlas-gen-windows-amd64:
-    name: Test msdf-atlas-gen (windows/amd64)
-    runs-on: windows-2025
-    needs: build-msdf-atlas-gen-windows-amd64
-    steps:
-      - name: Copy in binaries from previous steps
-        uses: actions/download-artifact@v7
-        with:
-          name: msdf-atlas-gen-windows-amd64.exe
-      - name: Test binary
-        run: |
-          Get-ChildItem
-          .\msdf-atlas-gen-windows-amd64.exe -help
+#  test-msdf-atlas-gen-windows-amd64:
+#    name: Test msdf-atlas-gen (windows/amd64)
+#    runs-on: windows-2025
+#    needs: build-msdf-atlas-gen-windows-amd64
+#    steps:
+#      - name: Copy in binaries from previous steps
+#        uses: actions/download-artifact@v7
+#        with:
+#          name: msdf-atlas-gen-windows-amd64.exe
+#      - name: Test binary
+#        run: |
+#          Get-ChildItem
+#          .\msdf-atlas-gen-windows-amd64.exe -help
 
   pr-binaries:
     name: Create Pull Request
@@ -259,10 +259,10 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: msdf-atlas-gen-linux-arm64
-      - name: "Copy in binary: msdf-atlas-gen-windows-amd64.exe"
-        uses: actions/download-artifact@v7
-        with:
-          name: msdf-atlas-gen-windows-amd64.exe
+#      - name: "Copy in binary: msdf-atlas-gen-windows-amd64.exe"
+#        uses: actions/download-artifact@v7
+#        with:
+#          name: msdf-atlas-gen-windows-amd64.exe
       - name: Set binaries as executable
         run: |
           chmod a+x ./msdf-atlas-gen-linux-arm64
