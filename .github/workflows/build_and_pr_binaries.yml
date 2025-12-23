@@ -172,7 +172,6 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: msdf-atlas-gen-linux-arm64
-          path: ./msdf-atlas-gen-linux-arm64
       - name: Test binary
         run: |
           set -euo pipefail
@@ -189,7 +188,6 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: msdf-atlas-gen-linux-amd64
-          path: ./msdf-atlas-gen-linux-amd64
       - name: Test binary
         run: |
           set -euo pipefail
@@ -206,7 +204,6 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: msdf-atlas-gen-darwin-arm64
-          path: ./msdf-atlas-gen-darwin-arm64
       - name: Test binary
         run: |
           set -euo pipefail
@@ -223,7 +220,6 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: msdf-atlas-gen-windows-amd64.exe
-          path: ./msdf-atlas-gen-windows-amd64.exe
       - name: Test binary
         shell: bash
         run: |
