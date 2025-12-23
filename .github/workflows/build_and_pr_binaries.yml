@@ -90,3 +90,40 @@ jobs:
         with:
           name: msdf-atlas-gen-linux-amd64
           path: ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen
+
+
+  build-msdf-atlas-gen-darwin-arm64:
+    name: msdf-atlas-gen (darwin/arm64)
+    runs-on: macos-15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Build Dependencies (packages)
+        run: |
+          brew install \
+            cmake \
+            ninja \
+            pkgconf \
+            python@3.14 \
+            unzip \
+            zip
+      - name: Install Build Dependencies (vcpkg)
+        run: |
+          git clone https://github.com/microsoft/vcpkg ${{ runner.temp }}/vcpkg
+          cd ${{ runner.temp }}/vcpkg
+          ./bootstrap-vcpkg.sh
+          echo "VCPKG_ROOT=${{ runner.temp }}/vcpkg" >> $GITHUB_ENV
+      - name: Build msdf-atlas-gen
+        run: |
+          git clone --recurse-submodules https://github.com/Chlumsky/msdf-atlas-gen.git ${{ runner.temp }}/msdf-atlas-gen && \
+          cd ${{ runner.temp }}/msdf-atlas-gen && \
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release && \
+          cmake --build build
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: msdf-atlas-gen-darwin-arm64
+          path: ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen
+
