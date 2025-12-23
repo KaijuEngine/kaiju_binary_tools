@@ -40,11 +40,14 @@ jobs:
           cd ${{ runner.temp }}/msdf-atlas-gen && \
           cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release && \
           cmake --build build
+      - name: Rename binary
+        run: |
+          mv -v ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-linux-arm64
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
           name: msdf-atlas-gen-linux-arm64
-          path: ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen
+          path: ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-linux-arm64
 
   build-msdf-atlas-gen-linux-amd64:
     name: Build msdf-atlas-gen (linux/amd64)
@@ -77,11 +80,14 @@ jobs:
           cd ${{ runner.temp }}/msdf-atlas-gen && \
           cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release && \
           cmake --build build
+      - name: Rename binary
+        run: |
+          mv -v ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-linux-amd64
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
           name: msdf-atlas-gen-linux-amd64
-          path: ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen
+          path: ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-linux-amd64
 
   build-msdf-atlas-gen-darwin-arm64:
     name: Build msdf-atlas-gen (darwin/arm64)
@@ -108,11 +114,14 @@ jobs:
           cd ${{ runner.temp }}/msdf-atlas-gen && \
           cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release && \
           cmake --build build
+      - name: Rename binary
+        run: |
+          mv -v ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-darwin-arm64
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
           name: msdf-atlas-gen-darwin-arm64
-          path: ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen
+          path: ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-darwin-arm64
 
   build-msdf-atlas-gen-windows-amd64:
     name: Build msdf-atlas-gen (windows/amd64)
@@ -154,14 +163,15 @@ jobs:
       #            -DCMAKE_TOOLCHAIN_FILE="$env:VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake" `
       #            -DVCPKG_TARGET_TRIPLET=x64-windows
 
-
+      - name: Rename binary
+        run: |
+          mv -v ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen.exe ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-windows-amd64.exe
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
           name: msdf-atlas-gen-windows-amd64.exe
           path: |
-            ${{ runner.temp }}\msdf-atlas-gen\build\bin\msdf-atlas-gen.exe
-            ${{ runner.temp }}\msdf-atlas-gen\build\bin\Release\msdf-atlas-gen.exe
+            ${{ runner.temp }}/msdf-atlas-gen/build/bin/msdf-atlas-gen-windows-amd64.exe
 
   test-msdf-atlas-gen-linux-arm64:
     name: Test msdf-atlas-gen (linux/arm64)
