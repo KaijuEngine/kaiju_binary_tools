@@ -132,10 +132,15 @@ jobs:
         run: |
           choco install -y --no-progress `
             cmake `
-            ninja `
             git `
             pkgconfiglite `
             7zip
+      - name: Install Build Dependencies (MSVC Dev Cmd)
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+      - name: Install Build Dependencies (Ninja)
+        uses: seanmiddleditch/gha-setup-ninja@v5
       - name: Install Build Dependencies (python)
         uses: actions/setup-python@v5
         with:
